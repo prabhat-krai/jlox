@@ -1,7 +1,11 @@
 package org.dev;
 
+import org.dev.data.Expr;
 import org.dev.data.Token;
+import org.dev.enums.TokenType;
+import org.dev.services.AstPrinter;
 import org.dev.services.JloxScanner;
+import org.dev.services.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,13 +53,26 @@ public class Jlox {
         JloxScanner scanner = new JloxScanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-        for(Token token : tokens) {
-            System.out.println(token);
-        }
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
+
+        // Stop if there was a syntax error.
+        if (hadError) return;
+
+        System.out.println(new AstPrinter().print(expression));
+
     }
 
     public static void error(int line, String message) {
         report(line, "", message);
+    }
+
+    public static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
     }
 
     private static void report(int line, String where, String message) {

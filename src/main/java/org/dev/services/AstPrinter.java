@@ -3,7 +3,7 @@ package org.dev.services;
 import org.dev.data.Expr;
 
 public class AstPrinter implements Expr.Visitor<String>{
-    String print(Expr expr) {
+    public String print(Expr expr) {
         return expr.accept(this);
     }
 

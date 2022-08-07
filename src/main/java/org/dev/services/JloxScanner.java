@@ -126,7 +126,6 @@ public class JloxScanner {
                 } else {
                     Jlox.error(line, "Unexpected character.");
                 }
-                Jlox.error(line, "Unknown Character");
                 break;
         }
     }
