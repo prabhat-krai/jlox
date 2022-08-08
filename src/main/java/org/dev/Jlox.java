@@ -3,7 +3,9 @@ package org.dev;
 import org.dev.data.Expr;
 import org.dev.data.Token;
 import org.dev.enums.TokenType;
+import org.dev.exceptions.RuntimeError;
 import org.dev.services.AstPrinter;
+import org.dev.services.Interpreter;
 import org.dev.services.JloxScanner;
 import org.dev.services.Parser;
 
@@ -18,6 +20,8 @@ import java.util.List;
 public class Jlox {
 
     public static boolean hadError = false;
+    public static boolean hadRuntimeError = false;
+    private static final Interpreter interpreter = new Interpreter();
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
             System.out.println("Unknown number of flags");
@@ -34,6 +38,8 @@ public class Jlox {
         run(new String(bytes, Charset.defaultCharset()));
         if(hadError)
             System.exit(65);
+        if (hadRuntimeError)
+            System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -59,8 +65,7 @@ public class Jlox {
         // Stop if there was a syntax error.
         if (hadError) return;
 
-        System.out.println(new AstPrinter().print(expression));
-
+        interpreter.interpret(expression);
     }
 
     public static void error(int line, String message) {
@@ -73,6 +78,12 @@ public class Jlox {
         } else {
             report(token.line, " at '" + token.lexeme + "'", message);
         }
+    }
+
+    public static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() +
+                "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 
     private static void report(int line, String where, String message) {
