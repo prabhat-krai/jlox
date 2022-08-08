@@ -75,7 +75,7 @@ public class Interpreter implements Expr.Visitor<Object> {
                     return String.valueOf(((Double) left).longValue()) + right;
                 if (left instanceof String && right instanceof String)
                     return (String)left + (String)right;
-                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
+                throw new RuntimeError(expr.operator, "Operands must be in numbers and/or strings.");
             case SLASH:
                 checkNumberOperands(expr.operator, left, right);
                 return (double)left / (double)right;
