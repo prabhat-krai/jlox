@@ -1,10 +1,10 @@
 package org.dev;
 
 import org.dev.data.Expr;
+import org.dev.data.Stmt;
 import org.dev.data.Token;
 import org.dev.enums.TokenType;
 import org.dev.exceptions.RuntimeError;
-import org.dev.services.AstPrinter;
 import org.dev.services.Interpreter;
 import org.dev.services.JloxScanner;
 import org.dev.services.Parser;
@@ -60,12 +60,12 @@ public class Jlox {
         List<Token> tokens = scanner.scanTokens();
 
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
 
         // Stop if there was a syntax error.
         if (hadError) return;
 
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
     }
 
     public static void error(int line, String message) {
