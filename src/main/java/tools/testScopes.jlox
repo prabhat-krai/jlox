@@ -1,0 +1,31 @@
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+  var a = "outer a";
+  var b = "outer b";
+  {
+    var a = "inner a";
+    print a;
+    print b;
+    print c;
+  }
+  print a;
+  print b;
+  print c;
+}
+print a;
+print b;
+print c;
+
+var d = 1;
+{
+  var d = d + 2;
+  print d;
+}
+print d;
+
+if(d < 3)
+    print "d is less than 3";
+else
+   print "true";
