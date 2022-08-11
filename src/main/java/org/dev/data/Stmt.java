@@ -9,6 +9,7 @@ public abstract class Stmt {
  public R visitVarStmt(Var stmt);
  public R visitBlockStmt(Block block);
  public R visitIfStmt(If anIf);
+ public R visitWhileStmt(While aWhile);
  }
  public static class Expression extends Stmt {
     public Expression(Expr expression) {
@@ -77,6 +78,21 @@ public abstract class Stmt {
         public final Expr condition;
         public final Stmt thenBranch;
         public final Stmt elseBranch;
+    }
+
+    public static class While extends Stmt {
+        public While(Expr condition, Stmt body) {
+            this.condition = condition;
+            this.body = body;
+        }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visitWhileStmt(this);
+        }
+
+        public final Expr condition;
+        public final Stmt body;
     }
 
  public abstract <R> R accept(Visitor<R> visitor);

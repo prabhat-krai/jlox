@@ -4,6 +4,7 @@ import org.dev.Jlox;
 import org.dev.data.Expr;
 import org.dev.data.Stmt;
 import org.dev.data.Token;
+import org.dev.enums.TokenType;
 import org.dev.exceptions.RuntimeError;
 
 import java.util.List;
@@ -122,6 +123,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+        return null;
+    }
+
     public void executeBlock(List<Stmt> statements,
                              Environment environment) {
         Environment previous = this.environment;
@@ -157,6 +166,21 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {
         return environment.get(expr.name);
+    }
+
+    @Override
+    public Object visitLogicalExpr(Expr.Logical expr) {
+        Object left = evaluate(expr.left);
+
+        if (expr.operator.type == TokenType.OR) {
+            if (isTruthy(left))
+                return left;
+        } else {
+            if (!isTruthy(left))
+                return left;
+        }
+
+        return evaluate(expr.right);
     }
 
     private Object evaluate(Expr expr) {
