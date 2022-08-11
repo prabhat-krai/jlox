@@ -4,12 +4,12 @@ import org.dev.Jlox;
 import org.dev.data.Token;
 import org.dev.enums.TokenType;
 
-import static org.dev.enums.TokenType.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.dev.enums.TokenType.*;
 
 
 public class JloxScanner {
