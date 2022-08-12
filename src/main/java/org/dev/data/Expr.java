@@ -1,5 +1,7 @@
 package org.dev.data;
 
+import java.util.List;
+
 public abstract class Expr {
  public interface Visitor<R> {
  public R visitBinaryExpr(Binary expr);
@@ -9,6 +11,7 @@ public abstract class Expr {
  public R visitVariableExpr(Variable expr);
  public R visitAssignExpr(Assign assign);
  public R visitLogicalExpr(Logical logical);
+ public R visitCallExpr(Call call);
  }
  public static class Binary extends Expr {
     public Binary(Expr left, Token operator, Expr right) {
@@ -107,6 +110,23 @@ public abstract class Expr {
         public final Expr left;
         public final Token operator;
         public final Expr right;
+    }
+
+    public static class Call extends Expr {
+        public Call(Expr callee, Token paren, List<Expr> arguments) {
+            this.callee = callee;
+            this.paren = paren;
+            this.arguments = arguments;
+        }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visitCallExpr(this);
+        }
+
+        public final Expr callee;
+        public final Token paren;
+        public final List<Expr> arguments;
     }
 
     public abstract <R> R accept(Visitor<R> visitor);

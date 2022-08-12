@@ -10,6 +10,8 @@ public abstract class Stmt {
  public R visitBlockStmt(Block block);
  public R visitIfStmt(If anIf);
  public R visitWhileStmt(While aWhile);
+ public R visitFunctionStmt(Function function);
+ public R visitReturnStmt(Return aReturn);
  }
  public static class Expression extends Stmt {
     public Expression(Expr expression) {
@@ -95,5 +97,37 @@ public abstract class Stmt {
         public final Stmt body;
     }
 
- public abstract <R> R accept(Visitor<R> visitor);
+    public static class Function extends Stmt {
+        public Function(Token name, List<Token> params, List<Stmt> body) {
+            this.name = name;
+            this.params = params;
+            this.body = body;
+        }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visitFunctionStmt(this);
+        }
+
+        public final Token name;
+        public final List<Token> params;
+        public final List<Stmt> body;
+    }
+
+    public static class Return extends Stmt {
+        public Return(Token keyword, Expr value) {
+            this.keyword = keyword;
+            this.value = value;
+        }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visitReturnStmt(this);
+        }
+
+        public final Token keyword;
+        public final Expr value;
+    }
+
+    public abstract <R> R accept(Visitor<R> visitor);
 }
