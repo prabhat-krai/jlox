@@ -33,6 +33,8 @@ public class Parser {
     }
 
     private Stmt statement() {
+        if (match(CLASS))
+            return classDeclaration();
         if (match(FOR))
             return forStatement();
         if (match(IF))
@@ -47,6 +49,20 @@ public class Parser {
             return new Stmt.Block(block());
 
         return expressionStatement();
+    }
+
+    private Stmt classDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect class name.");
+        consume(LEFT_BRACE, "Expect '{' before class body.");
+
+        List<Stmt.Function> methods = new ArrayList<>();
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            methods.add(function("method"));
+        }
+
+        consume(RIGHT_BRACE, "Expect '}' after class body.");
+
+        return new Stmt.Class(name, null, methods);
     }
 
     private Stmt returnStatement() {

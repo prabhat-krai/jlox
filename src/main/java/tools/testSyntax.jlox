@@ -32,7 +32,7 @@ print c;
 
 var d = 1;
 {
-  var d = d + 2;
+  d = d + 2;
   print d;
 }
 print d;
@@ -92,3 +92,7 @@ fun makeCounter() {
 var counter = makeCounter();
 counter(); // "1".
 counter(); // "2".
+
+class Bagel {}
+var bagel = Bagel();
+print bagel;

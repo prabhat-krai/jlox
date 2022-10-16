@@ -2,7 +2,7 @@ package org.dev.services;
 
 import java.util.List;
 
-interface JLoxCallable {
+public interface JLoxCallable {
     int arity();
     Object call(Interpreter interpreter, List<Object> arguments);
 }
